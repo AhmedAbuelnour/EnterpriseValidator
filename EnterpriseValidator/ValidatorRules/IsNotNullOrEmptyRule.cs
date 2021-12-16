@@ -9,8 +9,10 @@ namespace EnterpriseValidator.ValidatorRules
         {
             if (value == null)
                 return new ValueTask<bool>(false);
-            var str = value as string;
-            return new ValueTask<bool>(!string.IsNullOrWhiteSpace(str));
+            var input = value as string;
+            if (input == null)
+                return new ValueTask<bool>(false);
+            return new ValueTask<bool>(!string.IsNullOrWhiteSpace(input));
         }
     }
 }

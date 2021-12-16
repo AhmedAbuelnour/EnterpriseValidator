@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 namespace EnterpriseValidator.ValidatorRules
@@ -16,6 +13,9 @@ namespace EnterpriseValidator.ValidatorRules
                 return new ValueTask<bool>(false);
 
             string input = value as string;
+
+            if (input == null)
+                return new ValueTask<bool>(false);
 
             return new ValueTask<bool>(input.Where(c => !char.IsWhiteSpace(c)).Count() == Exact);
         }

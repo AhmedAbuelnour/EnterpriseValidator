@@ -10,6 +10,8 @@ namespace EnterpriseValidator.ValidatorRules
             if (value == null)
                 return new ValueTask<bool>(false);
             string email = value as string;
+            if (email == null)
+                return new ValueTask<bool>(false);
             string pattern = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([azA-Z]{2,4}|[0-9]{1,3})(\]?)$";
             if (Regex.IsMatch(email, pattern))
             {

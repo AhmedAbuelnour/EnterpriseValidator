@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 namespace EnterpriseValidator.ValidatorRules
@@ -14,9 +11,10 @@ namespace EnterpriseValidator.ValidatorRules
             if (value == null)
                 return new ValueTask<bool>(false);
 
-            string numbers = value as string; 
-            
-            return new ValueTask<bool>(numbers.All(a => char.IsDigit(a)));
+            string input = value as string;
+            if (input == null)
+                return new ValueTask<bool>(false);
+            return new ValueTask<bool>(input.All(a => char.IsDigit(a)));
         }
     }
 }
