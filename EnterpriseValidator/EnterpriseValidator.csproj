@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>Ahmed Abuelnour</Authors>
+    <Description>Provide a quick starter with microsoft's recommended way for object validation</Description>
+    <PackageIcon>check.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="check.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
