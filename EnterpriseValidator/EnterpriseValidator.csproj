@@ -1,11 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Ahmed Abuelnour</Authors>
     <Description>Provide a quick starter with microsoft's recommended way for object validation</Description>
     <PackageIcon>check.png</PackageIcon>
     <RepositoryUrl>https://github.com/AhmedAbuelnour/EnterpriseValidator</RepositoryUrl>
+    <Version>1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

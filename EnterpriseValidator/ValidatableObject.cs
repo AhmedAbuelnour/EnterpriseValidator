@@ -1,26 +1,54 @@
-﻿using System.Collections.Generic;
-
-namespace EnterpriseValidator
+﻿using EnterpriseValidator.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+namespace EnterpriseValidator;
+/// <summary>
+/// A base implementation for IValidatable interface.
+/// </summary>
+/// <typeparam name="T">
+/// A datatype that matches the datatype that you want to run a validation rule against
+/// </typeparam>
+public class ValidatableObject<T> : IValidatable<T>
 {
-    public class ValidatableObject<T> : IValidatable<T>
+    public ValidatableObject()
     {
-        public ValidatableObject()
-        {
-            ValidationsRules = new List<IValidationRule<T>>();
-            Errors = new List<string>();
-        }
-        public List<IValidationRule<T>> ValidationsRules { get; }
-        public List<string> Errors { get; private set; }
-        public bool IsValid { get; private set; }
-        public T Value { get; set; }
-        public bool Validate()
-        {
-            ValidationsRules.ForEach(async a =>
-            {
-                if (!await a.Check(Value))
-                    Errors.Add(a.ValidationMessage);
-            });
-            return IsValid = Errors.Count == 0;
-        }
+        ValidationsRules = new List<IValidationRule<T>>();
+        Errors = new List<ValidationRuleResult<T>>();
     }
+    public List<IValidationRule<T>> ValidationsRules { get; }
+    public List<ValidationRuleResult<T>> Errors { get; private set; }
+    public bool IsValid { get; private set; }
+    public T Value { get; set; }
+    /// <summary>
+    /// Add Rules to run against your input
+    /// </summary>
+    /// <param name="rules">params of your rules</param>
+    public void AddRules(params IValidationRule<T>[] rules)
+    {
+        if (rules == null)
+            throw new ArgumentNullException(nameof(rules), "You have't set any validation rules");
+
+        if (rules.Any(a => string.IsNullOrWhiteSpace(a.ValidationMessage)))
+            throw new ArgumentNullException(nameof(rules), $"One or more of the validation rules has no validation message");
+
+        ValidationsRules.AddRange(rules);
+    }
+    public bool Validate()
+    {
+        if (Value is null)
+            throw new NullValueException($"You have't set a value for the property {nameof(Value)}");
+
+        ValidationsRules.ForEach(async a =>
+        {
+            if (!await a.Check(Value))
+                Errors.Add(new ValidationRuleResult<T>(a.ValidationMessage, String.Concat((a.GetType().Name).Where(a => char.IsLetter(a)))));
+        });
+        return IsValid = Errors.Count == 0;
+    }
+    public string GetValidationRuleResultsAsJson()
+        => JsonSerializer.Serialize(Errors);
+    public IEnumerable<ValidationRuleResult<T>> GetValidationRuleResults() => Errors;
+
 }
